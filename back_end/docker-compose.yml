@@ -1,0 +1,22 @@
+version: "3"
+
+services:
+    mongo:
+        image: mongo
+        restart: always
+        ports:
+            - 27017:27017
+        volumes:
+            - ./docker_volumes/mongo:/data/db
+
+    back_end_server:
+        build: ./
+        image: app
+        depends_on:
+            - mongo
+        restart: always
+        ports:
+            - ${APP_PORT}:${APP_PORT}
+        volumes:
+            - ./docker_volumes/thumbnails:${TB_PATH}
+        command: npm run start
